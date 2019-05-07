@@ -1,10 +1,19 @@
 import React from 'react';
+import { 
+	StyleSheet
+} from 'react-native';
 import {
 	Content,
 	List,
-	Spinner
+	ListItem,
+	Left,
+	Body,
+	Right,
+	Text,
+	Thumbnail,
+	Spinner,
+	Icon
 } from 'native-base';
-import MusicItem from './MusicItem';
 import _ from 'lodash';
 
 const initialStates = {
@@ -17,7 +26,6 @@ export default class MusicList extends React.Component {
 		super(props);
 
 		this.state = initialStates;
-		this._handlePressViewDetail = this._handlePressViewDetail.bind(this);
 	}	
 
 	static navigationOptions = {
@@ -32,7 +40,7 @@ export default class MusicList extends React.Component {
 		await fetch('http://localhost:3000/results')
       .then(response => response.json())
       .then(jsonData => {
-        const data = _.orderBy(jsonData, ['name'], ['asc'])
+				const data = _.orderBy(jsonData, ['name'], ['asc'])
         this.setState({ 
 					isReady: true,
 					data: data
@@ -41,24 +49,6 @@ export default class MusicList extends React.Component {
       .catch((error) => {
         console.error(error)
       });
-	}
-
-	async _handlePressViewDetail(itemId) {
-		await fetch(`http://localhost:3000/results/${itemId}`)
-			.then(response => response.json())
-			.then(jsonData => {
-				let genresName = [];
-				jsonData.genres.forEach(value => {
-					genresName.push(value.name);
-				});
-				const data = {
-					songTitle: jsonData.name,
-					songImage: jsonData.artworkUrl100,
-					album: jsonData.collectionName,
-					genres: genresName
-				}
-				this.props.navigation.navigate('Detail', data);
-			});
 	}
 
 	render() {
@@ -74,13 +64,18 @@ export default class MusicList extends React.Component {
             {
               data.map((value, index) => {
                 return (
-									<MusicItem 
-										key={index}
-										musicName={value.name}
-										musicImageURI={value.artworkUrl100}
-										artistName={value.artistName}
-										onPress={() => this._handlePressViewDetail(value.id)}
-									/>
+                  <ListItem key={index} thumbnail style={styles.item}>
+                    <Left>
+                      <Thumbnail square source={{ uri: value.artworkUrl100 }} />
+                    </Left>
+                    <Body>
+                      <Text>{value.name}</Text>
+                      <Text note>{value.artistName}</Text>
+                    </Body>
+                    <Right>
+                      <Icon type="SimpleLineIcons" name="arrow-right" />
+                    </Right>
+                  </ListItem>
                 )
               })
             }						
@@ -91,3 +86,9 @@ export default class MusicList extends React.Component {
 		)
 	}
 }
+
+const styles = StyleSheet.create({
+	item: {
+		backgroundColor: '#FFFFFF'
+	}
+})
