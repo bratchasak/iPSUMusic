@@ -12,10 +12,10 @@ import {
   Icon
 } from 'native-base';
 
-const MusicItem = ({ musicName, musicImageURI, artistName, ...props }) => (
+const MusicItem = ({ musicName, musicImageUri, artistName, ...props }) => (
   <ListItem thumbnail {...props} style={styles.item}>
     <Left>
-      <Thumbnail square source={{ uri: musicImageURI }} />
+      <Thumbnail square source={{ uri: musicImageUri }} />
     </Left>
     <Body>
       <Text>{musicName}</Text>

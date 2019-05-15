@@ -57,7 +57,7 @@ export default class MusicList extends React.Component {
                   <MusicItem 
 										key={index}
 										musicName={value.name}
-										musicImageURI={value.artworkUrl100}
+										musicImageUri={value.artworkUrl100}
 										artistName={value.artistName}
 									/>
                 )
