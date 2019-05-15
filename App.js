@@ -6,12 +6,25 @@
  * @flow
  */
 import React, {Component} from 'react';
-import AppNavigator from './src/AppNavigator';
+import {
+  Container,
+  Header,
+  Body,
+  Text
+} from 'native-base'
+import MusicList from './src/MusicList'
 
 export default class App extends Component {
   render() {
     return (
-      <AppNavigator />
+      <Container>
+        <Header>
+          <Body>
+            <Text>All Music</Text>
+          </Body>
+        </Header>
+        <MusicList />
+      </Container>
     );
   }
 }

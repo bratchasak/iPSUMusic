@@ -1,11 +1,11 @@
-import React from 'react';
+import React from 'react'
 import {
 	Content,
 	List,
 	Spinner
-} from 'native-base';
-import MusicItem from './MusicItem';
-import _ from 'lodash';
+} from 'native-base'
+import MusicItem from './MusicItem'
+import _ from 'lodash'
 
 const initialStates = {
 	isReady: false,
@@ -14,27 +14,26 @@ const initialStates = {
 
 export default class MusicList extends React.Component {
 	constructor(props) {
-		super(props);
+		super(props)
 
-		this.state = initialStates;
+		this.state = initialStates
 	}	
 
-	static navigationOptions = {
-    title: 'Music List'
-  };
-
 	componentDidMount() {
-		this.fetchData();
+		this.fetchData()
 	}
 
-	async fetchData() {
-		await fetch('http://localhost:3000/results')
-      .then(response => response.json())
-      .then(jsonData => {
-        const data = _.orderBy(jsonData, ['name'], ['asc'])
+	fetchData() {
+    const uri = 'https://rss.itunes.apple.com/api/v1/th/apple-music/coming-soon/all/25/explicit.json'
+    
+		fetch(uri)
+      .then(resp => resp.json())
+      .then(respJson => {
+        const data = _.orderBy(respJson.feed.results, ['name'], ['asc'])
+        
         this.setState({ 
-					isReady: true,
-					data: data
+          data,
+					isReady: true
 				})
        })
       .catch((error) => {
