@@ -1,87 +1,79 @@
-import React from 'react';
+import React from 'react'
 import {
   StyleSheet,
+  View,
   Dimensions,
-	View,
-	Image
-} from 'react-native';
+  Image
+} from 'react-native'
 import {
-	Content,	
-	Text
-} from 'native-base';
+  Content,
+  Text
+} from 'native-base'
 
 export default class MusicDetail extends React.Component {
-  
+
   static navigationOptions = {
-    title: 'Music Detail'
-  };
+    title: 'Detail'
+  }
 
-	render() {
-		const { navigation } = this.props;
+  render() {
+    const { navigation } = this.props
 
-		const songTitle = navigation.getParam('songTitle');
-		const songImage = navigation.getParam('songImage');
-		const album = navigation.getParam('album');
-		const genres = navigation.getParam('genres');				
-		
-		return (			
+    const musicName = navigation.getParam('musicName')
+    const musicImageUri = navigation.getParam('musicImageUri')
+    const artistName = navigation.getParam('artistName')
+    const genreName = navigation.getParam('genreName')
+
+    return (
       <Content>
         <View style={styles.imageSection}>
-          <Image 
-            style={styles.imageSong}
-            source={{uri: songImage}}
-          />
+          <Image source={{ uri: musicImageUri }} style={styles.image} />
         </View>
-        <View style={styles.detailSection}>
-          <View style={styles.titleRow}>
-            <Text style={styles.title}>{songTitle}</Text>
+        <View style={styles.rowSection}>
+          <View style={styles.rowTitle}>
+            <Text style={styles.title}>{musicName}</Text>
           </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.label}>Album</Text>
-            <Text style={styles.detail}>{album}</Text>
+          <View style={styles.rowDetail}>
+            <Text style={styles.label}>Artist</Text>
+            <Text style={styles.value}>{artistName}</Text>
           </View>
-          <View style={styles.detailRow}>        
-            <Text style={styles.label}>Genres</Text>
-            <Text style={styles.detail}>{genres}</Text>
+          <View style={styles.rowDetail}>
+            <Text style={styles.label}>Genre</Text>
+            <Text style={styles.value}>{genreName}</Text>
           </View>
         </View>
-      </Content>			
-		)
-	}
+      </Content>
+    )
+  }
 }
 
 const styles = StyleSheet.create({
   imageSection: {
     flex: 1
   },
-  detailSection: {
+  rowSection: {
     flex: 1,
-    paddingLeft: 10,
-    paddingRight: 10
+    paddingHorizontal: 10
   },
-	imageSong: {
-		height: Dimensions.get('window').height * 0.35,
+  rowTitle: {
+    paddingVertical: 10
+  },
+  rowDetail: {
+    marginBottom: 10
+  },
+  image: {
+    height: Dimensions.get('window').height * 0.35,
     width: undefined
   },
-  titleRow: {    
-    paddingTop: 10,
-    paddingBottom: 10
-  },
   title: {
-    alignSelf: 'center',
-    textAlign: 'center',
-    color: '#d63031', 
-    fontSize: 24, 
-    lineHeight: 28
+    fontSize: 24,
+    paddingVertical: 10
   },
-	detailRow: {
-		marginBottom: 10
-	},
-	label: {
+  label: {
     color: '#636e72',
     fontSize: 16
   },
-  detail: {
+  value: {
     fontSize: 16
   }
 })

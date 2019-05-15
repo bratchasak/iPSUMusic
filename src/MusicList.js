@@ -17,49 +17,54 @@ export default class MusicList extends React.Component {
 		super(props);
 
 		this.state = initialStates;
-		this._handlePressViewDetail = this._handlePressViewDetail.bind(this);
-	}	
-
-	static navigationOptions = {
-    title: 'Music List'
-  };
+		this._handlePressItem = this._handlePressItem.bind(this)
+  }	
+  
+  static navigationOptions = {
+    title: 'All Music'
+  }
 
 	componentDidMount() {
 		this.fetchData();
 	}
 
-	async fetchData() {
-		await fetch('http://localhost:3000/results')
-      .then(response => response.json())
-      .then(jsonData => {
-        const data = _.orderBy(jsonData, ['name'], ['asc'])
+  fetchData() {
+    const uri = 'https://rss.itunes.apple.com/api/v1/th/apple-music/coming-soon/all/25/explicit.json'
+    
+		fetch(uri)
+      .then(resp => resp.json())
+      .then(respJson => {
+        const data = _.orderBy(respJson.feed.results, ['name'], ['asc'])
+        
         this.setState({ 
-					isReady: true,
-					data: data
+          data,
+					isReady: true
 				})
        })
       .catch((error) => {
         console.error(error)
       });
-	}
+  }
+  
+  _handlePressItem(id) {
+    const uri = 'https://itunes.apple.com/lookup?id='+id
 
-	async _handlePressViewDetail(itemId) {
-		await fetch(`http://localhost:3000/results/${itemId}`)
-			.then(response => response.json())
-			.then(jsonData => {
-				let genresName = [];
-				jsonData.genres.forEach(value => {
-					genresName.push(value.name);
-				});
-				const data = {
-					songTitle: jsonData.name,
-					songImage: jsonData.artworkUrl100,
-					album: jsonData.collectionName,
-					genres: genresName
-				}
-				this.props.navigation.navigate('Detail', data);
-			});
-	}
+    fetch(uri)
+      .then(resp => resp.json())
+      .then(respJson => {
+        if (respJson.resultCount > 0) {
+          const result = respJson.results[0]
+
+          const data = {
+            musicName: result.collectionName,
+            musicImageUri: result.artworkUrl100,
+            artistName: result.artistName,
+            genreName: result.primaryGenreName
+          }
+          this.props.navigation.navigate('Detail', data)
+        }
+      })
+  }
 
 	render() {
 		const { data, isReady } = this.state;
@@ -78,8 +83,8 @@ export default class MusicList extends React.Component {
 										key={index}
 										musicName={value.name}
 										musicImageURI={value.artworkUrl100}
-										artistName={value.artistName}
-										onPress={() => this._handlePressViewDetail(value.id)}
+                    artistName={value.artistName}
+                    onPress={() => this._handlePressItem(value.id)}
 									/>
                 )
               })
