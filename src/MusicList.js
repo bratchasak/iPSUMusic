@@ -28,22 +28,21 @@ export default class MusicList extends React.Component {
 		this.state = initialStates;
 	}	
 
-	static navigationOptions = {
-    title: 'Music List'
-  };
-
 	componentDidMount() {
 		this.fetchData();
 	}
 
-	async fetchData() {
-		await fetch('http://localhost:3000/results')
-      .then(response => response.json())
-      .then(jsonData => {
-				const data = _.orderBy(jsonData, ['name'], ['asc'])
+	fetchData() {
+    const uri = 'https://rss.itunes.apple.com/api/v1/th/apple-music/coming-soon/all/10/explicit.json'
+    
+		fetch(uri)
+      .then(resp => resp.json())
+      .then(respJson => {
+        const data = respJson.feed.results
+        
         this.setState({ 
-					isReady: true,
-					data: data
+          data,
+					isReady: true
 				})
        })
       .catch((error) => {
