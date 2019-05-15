@@ -33,12 +33,12 @@ export default class MusicList extends React.Component {
 	}
 
 	fetchData() {
-    const uri = 'https://rss.itunes.apple.com/api/v1/th/apple-music/coming-soon/all/10/explicit.json'
+    const uri = 'https://rss.itunes.apple.com/api/v1/th/apple-music/coming-soon/all/25/explicit.json'
     
 		fetch(uri)
       .then(resp => resp.json())
       .then(respJson => {
-        const data = respJson.feed.results
+        const data = _.orderBy(respJson.feed.results, ['name'], ['asc'])
         
         this.setState({ 
           data,
