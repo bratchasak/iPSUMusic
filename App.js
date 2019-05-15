@@ -20,7 +20,7 @@ export default class App extends Component {
       <Container>
         <Header>
           <Body>
-            <Title>Music List</Title>
+            <Title>All Music</Title>
           </Body>
         </Header>
         <MusicList />
